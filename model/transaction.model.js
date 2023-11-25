@@ -37,4 +37,10 @@ const Transaction = sequelize.define('transaction', {
     },
 });
 
+sequelize.sync().then(() => {
+    console.log('Transaction table created successfully!');
+}).catch((error) => {
+    console.error('Unable to create table : ', error);
+});
+
 export default Transaction;

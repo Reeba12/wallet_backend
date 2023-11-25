@@ -1,6 +1,6 @@
 // models/Wallet.js
 import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.config.js';
+import { sequelize } from '../config/db.config.js';
 
 const Wallet = sequelize.define('userWallet', {
     id: {

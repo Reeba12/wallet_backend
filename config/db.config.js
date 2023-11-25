@@ -1,7 +1,7 @@
 // config/database.js
 import { Sequelize } from 'sequelize';
-
-const sequelize = new Sequelize(process.env.DB, process.env.USER, process.env.PASSWORD, {
+console.log(process.env.DB, process.env.USER, process.env.PASSWORD)
+const sequelize = new Sequelize('wallet', 'root', 'root', {
     host: 'localhost',
     dialect: 'mysql',
     pool: {
@@ -11,5 +11,12 @@ const sequelize = new Sequelize(process.env.DB, process.env.USER, process.env.PA
         idle: 10000
     }
 });
-
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch((err) => {
+    console.error('Unable to connect to the database:', err);
+  });
 export { sequelize };

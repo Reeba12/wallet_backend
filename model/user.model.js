@@ -1,18 +1,19 @@
 // models/User.js
 import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.config.js';
+import { v4 as uuidv4 } from 'uuid';
+import { sequelize } from '../config/db.config.js';
 
 const User = sequelize.define('User', {
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        defaultValue: () => uuidv4(),
         primaryKey: true,
-        autoIncrement: true,
     },
     name: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    emaiil_address: {
+    email_address: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -22,6 +23,7 @@ const User = sequelize.define('User', {
     },
     login: {
         type: DataTypes.JSON,
+        allowNull: true,
         defaultValue: {
             login_count: 0,
             failed_attempts_count: 0,
@@ -34,7 +36,7 @@ const User = sequelize.define('User', {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
     },
-    nic: {
+    cnic: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -48,17 +50,15 @@ const User = sequelize.define('User', {
     },
     date_of_birth: {
         type: DataTypes.DATEONLY,
-        allowNull: false,
-    },
-    created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-    },
-    updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-    },
+        allowNull: true,
+    }
 }
 );
+
+sequelize.sync().then(() => {
+    console.log('User table created successfully!');
+}).catch((error) => {
+    console.error('Unable to create table : ', error);
+});
 
 export default User;
