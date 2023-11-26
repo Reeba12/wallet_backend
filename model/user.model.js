@@ -22,17 +22,17 @@ const User = sequelize.define("User", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  login: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-    defaultValue: {
-      login_count: 0,
-      failed_attempts_count: 0,
-      last_login_at: null,
-      locked_out_till: null,
-      last_failed_at: null,
-    },
-  },
+//   login: {
+//     type: DataTypes.TEXT,
+//     allowNull: true,
+//     defaultValue: {
+//       login_count: 0,
+//       failed_attempts_count: 0,
+//       last_login_at: null,
+//       locked_out_till: null,
+//       last_failed_at: null,
+//     },
+//   },
 //   -------- reeba's code ----------------
   // login: {
   //     type: DataTypes.JSON,
