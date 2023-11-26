@@ -4,9 +4,9 @@ import * as UserController from '../controller/user.controller';
 
 const router = express.Router();
 
-router.post('/', UserController.createUser);
+router.patch('/:userId', UserController.updateUser);
+router.delete('/:userId', UserController.deleteUser);
 router.get('/:userId', UserController.getUser);
+router.get('/', UserController.getAllUser);
 
-
-// Repeat a similar structure for other route files
 export default router;
