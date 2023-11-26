@@ -1,4 +1,4 @@
-const Wallet = require('../model/wallet.model');
+import Wallet from '../model/wallet.model.js';
 
 function generateUniqueWalletAddress() {
   // Generate a random string to simulate a unique wallet address

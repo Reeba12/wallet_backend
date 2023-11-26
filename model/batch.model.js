@@ -1,6 +1,6 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db.config'); // Assuming Sequelize connection is configured
-const { default: User } = require('./user.model');
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/db.config.js'; // Assuming Sequelize connection is configured
+import User from './user.model.js';
 
 const Batch = sequelize.define('Batch', {
     name: {
@@ -23,4 +23,4 @@ const Batch = sequelize.define('Batch', {
 //     as: 'Recipients', // Alias for the association
 // });
 
-module.exports = Batch;
+export default Batch;
