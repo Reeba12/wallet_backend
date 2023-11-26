@@ -1,9 +1,9 @@
 export const personalWallet = async (req, res) => {
     try {
         const { user } = req; // The authenticated user data is available in req.user (you may need to adjust this based on your auth middleware)
-        const { Currency } = req.body;
+        const { country, city, address } = req.body;
         console.log("USer from postman:", user);
-        const wallet = await walletService.createPersonalWallet(user, Currency);
+        const wallet = await 
 
         res.status(201).json({ WalletID: wallet.id });
     } catch (error) {

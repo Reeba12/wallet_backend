@@ -2,6 +2,7 @@
 import { DataTypes } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
 import { sequelize } from '../config/db.config.js';
+import Batch from './batch.model.js';
 
 const User = sequelize.define('User', {
     id: {
@@ -34,7 +35,11 @@ const User = sequelize.define('User', {
     },
     is_active: {
         type: DataTypes.BOOLEAN,
-        defaultValue: true,
+        defaultValue: false,
+    },
+    is_verified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
     },
     cnic: {
         type: DataTypes.STRING,
@@ -42,18 +47,20 @@ const User = sequelize.define('User', {
     },
     mobile_number: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
-    address: {
+    paypocket_id: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    date_of_birth: {
-        type: DataTypes.DATEONLY,
-        allowNull: true,
-    }
-}
-);
+});
+
+// User.belongsToMany(Batch, {
+//     through: 'BatchUser', // Same join table 'BatchUser'
+//     as: 'Batches', // Alias for the association
+// });
+
+module.exports = User;
 
 sequelize.sync().then(() => {
     console.log('User table created successfully!');

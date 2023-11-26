@@ -16,9 +16,29 @@ const Wallet = sequelize.define('userWallet', {
         type: DataTypes.DECIMAL(10, 2),
         defaultValue: 0.0,
     },
+    currency: {
+        type: DataTypes.STRING,
+        defaultValue: 'USD',
+    },
     type: {
-        type: DataTypes.ENUM('savings', 'current'),
-        defaultValue: 'savings',
+        type: DataTypes.ENUM('personal', 'business'),
+        defaultValue: 'personal',
+    },
+    address: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    country: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    city: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    document: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     created_at: {
         type: DataTypes.DATE,

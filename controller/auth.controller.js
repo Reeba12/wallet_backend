@@ -2,6 +2,9 @@ const bcrypt = require('bcrypt');
 import { validationResult } from 'express-validator'
 import User from '../model/user.model'
 import jwt from 'jsonwebtoken';
+import { generateOTP } from './../utils/helperFunctions';
+const { Vonage } = require('@vonage/server-sdk')
+const otpMap = {};
 const saltRounds = 10; // The number of salt rounds for bcrypt
 
 export const signup = async (req, res) => {
@@ -17,11 +20,8 @@ export const signup = async (req, res) => {
       email_address,
       password,
       cnic,
-      mobile_number,
-      address,
-      date_of_birth,
+      paypocket_id,
     } = req.body;
-
     // Check if the email address is already registered
     const existingUser = await User.findOne({ where: { email_address } });
     if (existingUser) {
@@ -36,12 +36,24 @@ export const signup = async (req, res) => {
       email_address,
       password: hashedPassword,
       cnic,
-      mobile_number,
-      address,
-      date_of_birth,
+      paypocket_id
     });
 
-    res.status(201).json({ message: 'User created successfully', user: newUser });
+    const token = jwt.sign({ userId: user.id }, 'abc', { expiresIn: '1h' });
+    res.status(201).json({
+      message: 'User created successfully', user: {
+        name: newUser.name,
+        email_address: newUser.email_address,
+        cnic: newUser.cnic,
+        paypocket_id: newUser.paypocket_id,
+        id: newUser.id,
+        phone_number: newUser.mobile_number,
+        is_active: newUser.is_active,
+        login: newUser.login,
+        is_verified: newUser.is_verified,
+        token: token
+      }
+    });
   } catch (error) {
     console.error('Error creating user:', error);
     res.status(500).json({ message: 'Error creating user' });
@@ -92,3 +104,59 @@ export const login = async (req, res) => {
     res.status(500).json({ error: 'Login failed' });
   }
 };
+
+export const sendOTPviaSMS = async (req, res) => {
+  try {
+    const { phoneNumber } = req.body;
+    const OTP = generateOTP();
+    const vonage = new Vonage({
+      apiKey: '96af7af7', // Replace with your Vonage API key
+      apiSecret: 'GgZRq5TjxOfOM4Y7' // Replace with your Vonage API secret
+    });
+
+    const from = "Vonage APIs"; // Replace with your desired sender name
+    const to = phoneNumber; // Replace with the actual phone number
+    const text = `Your OTP is ${OTP}.` //Please enter it on the verification page to proceed.
+
+    await vonage.sms.send({ to, from, text })
+      .then(resp => {
+        res.status(200).json({ message: 'OTP sent successfully' });
+        otpMap[phoneNumber] = { code: OTP, expiresAt: Date.now() + 300000 }; // Expires in 5 minutes (300,000 milliseconds)
+      })
+      .catch(err => {
+        res.status(500).json('There was an error sending the messages.');
+        console.error(err);
+      });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export const verifyOtp = async (req, res) => {
+  try {
+    const { userId, phoneNumber, OTP } = req.body;
+
+    const storedOTP = otpMap[phoneNumber];
+
+    if (!storedOTP || storedOTP.expiresAt < Date.now()) {
+      return res.status(404).json({ message: 'OTP not found or expired' });
+    }
+
+    if (OTP === storedOTP.code) {
+      delete otpMap[phoneNumber]; // Remove OTP after successful verification
+      const user = User.update({ is_verified: true, mobile_number: phoneNumber }, { where: { id: userId } });
+      if (user) {
+        return res.status(200).json({
+          is_verified: user.is_verified,
+          message: 'OTP verified successfully'
+        });
+      }
+    } else {
+      return res.status(400).json({ message: 'Incorrect OTP' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
