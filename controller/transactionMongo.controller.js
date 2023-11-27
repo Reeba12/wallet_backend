@@ -1,16 +1,14 @@
-// routes/wallet.js
-
 const express = require('express');
 const router = express.Router();
-const Wallet = require('../models/wallet');
-const Transaction = require('../models/transaction');
+const Wallet = require('../model/walletMongo.model');
+const Transaction = require('../model/transactionMongo.model');
 
 router.post('/fund-wallet', async (req, res) => {
   const { userID, walletID, amount, fundingMethod } = req.body;
 
   try {
     // Find the user's wallet
-    const wallet = await Wallet.findOne({ where: { WalletID: walletID, UserID: userID } });
+    const wallet = await Wallet.findOne({ WalletID: walletID, UserID: userID });
 
     if (!wallet) {
       return res.status(404).json({ error: 'Wallet not found for the user' });
@@ -37,4 +35,5 @@ router.post('/fund-wallet', async (req, res) => {
     res.status(500).json({ error: 'Funding the wallet failed' });
   }
 });
+
 export default router;

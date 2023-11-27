@@ -39,7 +39,6 @@ const BankAccount = sequelize.define('bank_account', {
     },
 });
 
-module.exports = BankAccount;
 
 sequelize.sync().then(() => {
     console.log('bank_account table created successfully!');

@@ -1,8 +1,7 @@
 // routes/bankAccount.js
 
-const express = require('express');
-const BankAccount = require('../model/bankAccount.model');
-const { v1: UUIDV1 } = require('uuid');
+import BankAccount from '../model/bankAccount.model.js';
+import { v1 as UUIDV1 } from 'uuid';
 
 // Create a new bank account
 export const createBankAccount = async (req, res) => {

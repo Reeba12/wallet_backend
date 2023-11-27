@@ -1,5 +1,5 @@
-import BankAccount from '../model/bankAccount.model';
-import Wallet from '../model/wallet.model';
+import BankAccount from '../model/bankAccount.model.js';
+import Wallet from '../model/wallet.model.js';
 
 export const transferFundtoWalletFromBank = async (req, res) => {
     const { amount, account_number, wallet_id, bank } = req.body;

@@ -15,6 +15,7 @@ const sequelize = new Sequelize(process.env.DATABASE, process.env.USER, process.
     dialect: 'mysql',
     dialectModule: await import('mysql2'), // Use `await import` for dynamic import
     benchmark: true,
+    logging: console.log,
     pool: {
         max: 5,
         min: 0,

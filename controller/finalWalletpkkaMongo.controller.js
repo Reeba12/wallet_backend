@@ -1,4 +1,4 @@
-import Wallet from '../model/wallet.model.js';
+import Wallet from '../model/walletMongo.model.js';
 
 function generateUniqueWalletAddress() {
   // Generate a random string to simulate a unique wallet address
@@ -16,12 +16,18 @@ function generateUniqueWalletAddress() {
 
 async function createPersonalWallet(user, currency) {
   try {
-console.log("USer from postman----------:", user, user.userId);
+    console.log("User from postman----------:", user, user.userId);
 
     const walletAddress = generateUniqueWalletAddress(); // Implement your unique address generation logic
-    const values = { wallet_address: walletAddress, balance: 0.00, currency: currency, wallet_type: 'Personal', user_id: user.userId };
+    const wallet = new Wallet({
+      wallet_address: walletAddress,
+      balance: 0.00,
+      currency: currency,
+      wallet_type: 'Personal',
+      user_id: user.userId
+    });
 
-    const wallet = await Wallet.create(values);
+    await wallet.save();
     return wallet;
   } catch (error) {
     console.error(error);
@@ -32,9 +38,15 @@ console.log("USer from postman----------:", user, user.userId);
 async function createBusinessWallet(user, currency) {
   try {
     const walletAddress = generateUniqueWalletAddress(); // Implement your unique address generation logic
-    const values = { wallet_address: walletAddress, balance: 0.00, currency: currency, wallet_type: 'Business', user_id: user.userId };
+    const wallet = new Wallet({
+      wallet_address: walletAddress,
+      balance: 0.00,
+      currency: currency,
+      wallet_type: 'Business',
+      user_id: user.userId
+    });
 
-    const wallet = await Wallet.create(values);
+    await wallet.save();
     return wallet;
   } catch (error) {
     console.error(error);

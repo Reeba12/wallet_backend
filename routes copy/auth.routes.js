@@ -1,6 +1,6 @@
 // routes/userRoutes.js
 import express from 'express';
-import * as AuthController from '../controller/authMongo.controller.js';
+import * as AuthController from '../controller/auth.controller.js';
 import { signUpValidationRules } from '../utils/validations/validation.js';
 
 const router = express.Router();

@@ -1,8 +1,8 @@
 // routes/userRoutes.js
 import express from 'express';
-import * as BankAccountController from '../controller/bankAccountMongo.controller.js';
-import * as BankController from '../controller/bankMongo.controller.js';
-import * as TransferController from '../controller/fund_transferMongo.controller.js';
+import * as BankAccountController from '../controller/bankAccount.js';
+import * as BankController from '../controller/bank.js';
+import * as TransferController from '../controller/fund_transfer.controller.js';
 const router = express.Router();
 
 router.post('/bank-account', BankAccountController.createBankAccount);

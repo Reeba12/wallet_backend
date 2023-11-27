@@ -1,8 +1,6 @@
-// routes/transaction.js
-
 const express = require('express');
 const router = express.Router();
-const Transaction = require('../models/transaction');
+const Transaction = require('../model/transactionMongo.model.js');
 
 // Create a new transaction
 router.post('/transactions', async (req, res) => {
@@ -29,13 +27,11 @@ router.get('/transactions/:user_id', async (req, res) => {
   const user_id = req.params.user_id;
 
   try {
-    const transactions = await Transaction.findAll({
-      where: {
-        [Op.or]: [
-          { sender_id: user_id },
-          { receiver_id: user_id },
-        ],
-      },
+    const transactions = await Transaction.find({
+      $or: [
+        { sender_id: user_id },
+        { receiver_id: user_id },
+      ],
     });
 
     res.status(200).json(transactions);
@@ -50,7 +46,7 @@ router.get('/transaction/:id', async (req, res) => {
   const id = req.params.id;
 
   try {
-    const transaction = await Transaction.findByPk(id);
+    const transaction = await Transaction.findById(id);
 
     if (!transaction) {
       return res.status(404).json({ error: 'Transaction not found' });

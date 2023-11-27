@@ -1,16 +1,11 @@
-// routes/bank.js
 import express from 'express';
-import Bank from '../model/bank.model.js';
+import Bank from '../model/bankMongo.model.js';
 
 const router = express.Router();
 
 // Create a new bank
 export const createBank = async (req, res) => {
-  const {
-    bank_name,
-    country,
-    bank_code,
-  } = req.body;
+  const { bank_name, country, bank_code } = req.body;
 
   try {
     const bank = await Bank.create({
@@ -28,7 +23,7 @@ export const createBank = async (req, res) => {
 // Get a list of all banks
 router.get('/banks', async (req, res) => {
   try {
-    const banks = await Bank.findAll();
+    const banks = await Bank.find();
     res.status(200).json(banks);
   } catch (error) {
     console.error(error);
@@ -41,7 +36,7 @@ router.get('/bank/:id', async (req, res) => {
   const id = req.params.id;
 
   try {
-    const bank = await Bank.findByPk(id);
+    const bank = await Bank.findById(id);
 
     if (!bank) {
       return res.status(404).json({ error: 'Bank not found' });
