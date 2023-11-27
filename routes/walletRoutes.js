@@ -4,8 +4,9 @@ import { authenticate, fetchUserData } from '../utils/middlewares/authMiddleware
 import * as WalletController from '../controller/wallet.controller.js';
 
 // Create a personal wallet for an authenticated user
-router.post(`/create-wallet`, WalletController.createWallet);
-router.get(`/:id`, fetchUserData, WalletController.getWalletById);
+router.post(`/create`, WalletController.createWallet);
+router.get(`/:id`, WalletController.getWalletById);
+router.get('/user/:id', WalletController.getWalletByUserId)
 
 // Create a business wallet for an authenticated user
 // router.post('/business/batch', authenticate, WalletController.businessWallet);

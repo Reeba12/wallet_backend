@@ -3,7 +3,6 @@ import Wallet from '../model/wallet.model.js';
 // Create a new wallet
 export const createWallet = async (req, res) => {
   try {
-    const { user } = req; // The authenticated user data is available in req.user
     const { country, city, address, type, user_id } = req.body;
 
     const wallet = await Wallet.create({
@@ -36,4 +35,13 @@ export const getWalletById = async (req, res) => {
   }
 }
 
-
+export const getWalletByUserId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const wallets = await Wallet.find({user_id: id}).populate('user_id').exec();
+    return res.status(200).json({ wallets });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Wallet not found' });
+  }
+}

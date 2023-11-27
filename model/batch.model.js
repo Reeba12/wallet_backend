@@ -6,14 +6,20 @@ const batchSchema = new mongoose.Schema({
         type: String,
         default: v4,
         primaryKey: true,
-      },
+    },
     name: {
         type: String,
         required: true,
     },
-    users: [{
-        type: String,
-        ref: 'User',
+    batch_users: [{
+        id: {
+            type: String,
+            ref: 'User',
+        },
+        amount: {
+            type: Number,
+            default: 0.0,
+        },
     }],
     createdAt: {
         type: Date,

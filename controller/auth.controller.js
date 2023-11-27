@@ -87,15 +87,17 @@ export const login = async (req, res) => {
 
     res.status(200).json({
       token,
-      email_address: user.email_address,
-      name: user.name,
-      id: user._id,
-      address: user.address,
-      phone_number: user.mobile_number,
-      is_active: user.is_active,
-      cnic: user.cnic,
-      date_of_birth: user.date_of_birth,
-      login: user.login,
+      user: {
+        email_address: user.email_address,
+        name: user.name,
+        id: user._id,
+        address: user.address,
+        phone_number: user.mobile_number,
+        is_active: user.is_active,
+        cnic: user.cnic,
+        date_of_birth: user.date_of_birth,
+        login: user.login,
+      }
     });
   } catch (error) {
     console.error('Login error: ' + error);

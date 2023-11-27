@@ -46,3 +46,23 @@ export const getTransactionById = async (req, res) => {
     return res.status(500).json({ error: 'Transaction not found' });
   }
 }
+
+export const createBatchTransaction = async (req, res) => {
+  try {
+    const { batch_name, batch_users } = req.body;
+    for(const paypocketUser of batch_users){
+      const user = await User.findOne({ paypocket_id: paypocketUser.id }).populate('walletId');
+      if(!user){
+        return res.status(400).json({ message: `User with paypocket_id ${userPaypocketId} does not exist.` });
+      }
+      user.walletId.Balance = user.walletId.Balance - paypocketUser.amount;
+    }
+    const transaction = await Transaction.create({
+      batch_name,
+      batch_users,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message, message: 'Batch creation failed.' });
+  }
+}

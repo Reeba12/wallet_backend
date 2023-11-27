@@ -5,16 +5,15 @@ export const transferFundtoWalletFromBank = async (req, res) => {
   const { amount, account_number, wallet_id, bank } = req.body;
 
   try {
-    const bankAccount = await BankAccount.findOne({
+    const bankAccount = await BankAccount.find({
       account_number: account_number,
-      bank_name: bank.name
     });
 
-    if (!bankAccount) {
+    if (bankAccount.length === 0) {
       return res.status(404).json({ error: 'Bank account not found' });
     }
 
-    if (bankAccount.amount < amount) {
+    if (bankAccount[0].amount < amount) {
       return res.status(400).json({ error: 'Insufficient balance in bank account' });
     }
 
@@ -23,17 +22,15 @@ export const transferFundtoWalletFromBank = async (req, res) => {
     if (!wallet) {
       return res.status(404).json({ error: 'Wallet not found' });
     }
-
     // Update bank account and wallet
     const updatedBankAccount = await BankAccount.findOneAndUpdate(
-      { account_number: account_number, bank_name: bank.name },
-      { $set: { amount: bankAccount.amount - amount } },
+      { account_number: account_number },
+      { $set: { amount: bankAccount[0].amount - amount } },
       { new: true }
     );
-
     const updatedWallet = await Wallet.findOneAndUpdate(
       { _id: wallet_id },
-      { $set: { amount: wallet.amount + amount } },
+      { $set: { balance: wallet.balance + amount } },
       { new: true }
     );
 

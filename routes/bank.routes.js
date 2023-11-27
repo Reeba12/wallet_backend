@@ -5,6 +5,6 @@ import * as TransferController from '../controller/fund_transfer.controller.js';
 const router = express.Router();
 
 router.post('/bank-account', BankAccountController.createBankAccount);
-router.get('/transfer-fund', TransferController.transferFundtoWalletFromBank);
+router.post('/transfer-fund', TransferController.transferFundtoWalletFromBank);
 
 export default router;
