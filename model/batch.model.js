@@ -11,10 +11,10 @@ const batchSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    totalAmount: {
-        type: Number,
-        required: true,
-    },
+    users: [{
+        type: String,
+        ref: 'User',
+    }],
     createdAt: {
         type: Date,
         default: Date.now,

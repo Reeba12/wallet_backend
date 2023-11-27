@@ -108,25 +108,27 @@ export const sendOTPviaSMS = async (req, res) => {
     const { phoneNumber } = req.body;
     const OTP = generateOTP();
     const vonage = new Vonage({
-      apiKey: '96af7af7', // Replace with your Vonage API key
-      apiSecret: 'GgZRq5TjxOfOM4Y7', // Replace with your Vonage API secret
+      apiKey: "96af7af7", // Replace with your Vonage API key
+      apiSecret: "GgZRq5TjxOfOM4Y7", // Replace with your Vonage API secret
     });
-
-    const from = 'Vonage APIs'; // Replace with your desired sender name
-    const to = phoneNumber; // Replace with the actual phone number
+    const from = "Vonage APIs";
+    const to = phoneNumber;
+    // const to = "923158956675"
     const text = `Your OTP is ${OTP}. Please enter it on the verification page to proceed.`;
 
-    await vonage.message.sendSms(from, to, text, (err, responseData) => {
-      if (err) {
+    await vonage.sms
+      .send({ to, from, text })
+      .then((resp) => {
+        res.status(200).json({ message: "OTP sent successfully" });
+        otpMap[phoneNumber] = { code: OTP, expiresAt: Date.now() + 300000 }; // Expires in 5 minutes (300,000 milliseconds)
+      })
+      .catch((err) => {
+        res.status(500).json("There was an error sending the messages.");
         console.error(err);
-        return res.status(500).json({ error: 'Error sending SMS' });
-      }
-      res.status(200).json({ message: 'OTP sent successfully' });
-      otpMap[phoneNumber] = { code: OTP, expiresAt: Date.now() + 300000 }; // Expires in 5 minutes (300,000 milliseconds)
-    });
+      });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    throw error;
   }
 };
 
