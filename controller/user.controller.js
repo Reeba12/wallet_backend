@@ -1,6 +1,6 @@
 // controllers/UserController.js
 
-import User from '../model/user.model';
+import User from '../model/user.model.js';
 
 export const updateUser = async (req, res) => {
   try{

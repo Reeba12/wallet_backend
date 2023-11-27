@@ -1,9 +1,20 @@
 // config/database.js
 import { Sequelize } from 'sequelize';
-console.log(process.env.DB, process.env.USER, process.env.PASSWORD)
-const sequelize = new Sequelize('wallet', 'root', 'root', {
-    host: 'localhost',
+import dotenv from 'dotenv';
+dotenv.config();
+console.log(
+  process.env.DATABASE,
+  process.env.USER,
+  process.env.PASSWORD,
+  process.env.HOST
+);
+
+// consolepen.log(process.env.DATABASE, process.env.USER, process.env.PASSWORD)
+const sequelize = new Sequelize(process.env.DATABASE, process.env.USER, process.env.PASSWORD, {
+    host: process.env.HOST,
     dialect: 'mysql',
+    dialectModule: await import('mysql2'), // Use `await import` for dynamic import
+    benchmark: true,
     pool: {
         max: 5,
         min: 0,

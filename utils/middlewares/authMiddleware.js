@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 // Define your secret key (should be stored securely, e.g., in an environment variable)
 const secretKey = 'your-secret-key';
@@ -25,4 +25,4 @@ function authenticate(req, res, next) {
   });
 }
 
-module.exports = { authenticate };
+export { authenticate };

@@ -1,9 +1,9 @@
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 import { validationResult } from 'express-validator'
-import User from '../model/user.model'
+import User from '../model/user.model.js'
 import jwt from 'jsonwebtoken';
-import { generateOTP } from './../utils/helperFunctions';
-const { Vonage } = require('@vonage/server-sdk')
+import { generateOTP } from './../utils/helperFunctions.js';
+import { Vonage } from '@vonage/server-sdk';
 const otpMap = {};
 const saltRounds = 10; // The number of salt rounds for bcrypt
 
@@ -39,7 +39,7 @@ export const signup = async (req, res) => {
       paypocket_id
     });
 
-    const token = jwt.sign({ userId: user.id }, 'abc', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: newUser.id }, 'abc', { expiresIn: '1h' });
     res.status(201).json({
       message: 'User created successfully', user: {
         name: newUser.name,

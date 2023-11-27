@@ -1,11 +1,11 @@
 import express from "express";
-import { json, urlencoded } from "body-parser";
+import pkg from "body-parser";
 import appRoutes from './routes/index.js';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
 const app = express();
-
+const { json, urlencoded } = pkg;
 app.use(json());
 app.use(bodyParser.json());
 app.use(urlencoded({ extended: true }));
