@@ -1,15 +1,16 @@
 // models/Wallet.js
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/db.config.js';
+import { v4 as uuidv4 } from 'uuid';
 
 const Wallet = sequelize.define('userWallet', {
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        defaultValue: () => uuidv4(),
         primaryKey: true,
-        autoIncrement: true,
     },
     user_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         foreignKey: true,
     },
     balance: {

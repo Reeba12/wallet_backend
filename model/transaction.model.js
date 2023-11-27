@@ -1,12 +1,13 @@
 // models/User.js
 import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.config.js';
+import {sequelize} from '../config/db.config.js';
+import { v4 as uuidv4 } from 'uuid';
 
 const Transaction = sequelize.define('transaction', {
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        defaultValue: () => uuidv4(),
         primaryKey: true,
-        autoIncrement: true,
     },
     sender_id: {
         type: DataTypes.STRING,
@@ -23,17 +24,16 @@ const Transaction = sequelize.define('transaction', {
     amount: {
         type: DataTypes.INTEGER,
     },
-    currency: {
+    type: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+    description: {
+        type: DataTypes.STRING,
     },
-    updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+    method: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
 });
 

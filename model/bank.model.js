@@ -1,12 +1,13 @@
 // models/User.js
 import { DataTypes } from 'sequelize';
 import {sequelize} from '../config/db.config.js';
+import { v4 as uuidv4 } from 'uuid';
 
 const Bank = sequelize.define('banks', {
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        defaultValue: () => uuidv4(),
         primaryKey: true,
-        autoIncrement: true,
     },
     bank_name: {
         type: DataTypes.STRING,

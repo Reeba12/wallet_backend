@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { generateOTP } from './../utils/helperFunctions';
 const { Vonage } = require('@vonage/server-sdk')
 const otpMap = {};
+import nodemailer from 'nodemailer';
 const saltRounds = 10; // The number of salt rounds for bcrypt
 
 export const signup = async (req, res) => {
@@ -39,7 +40,7 @@ export const signup = async (req, res) => {
       paypocket_id
     });
 
-    const token = jwt.sign({ userId: user.id }, 'abc', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: newUser.id }, 'abc', { expiresIn: '1h' });
     res.status(201).json({
       message: 'User created successfully', user: {
         name: newUser.name,
@@ -160,3 +161,46 @@ export const verifyOtp = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email_address } = req.body;
+
+    const user = await User.findOne({ where: { email_address } });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const OTP = generateOTP();
+    
+    // Using Nodemailer to send email
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // Example: 'Gmail'
+      auth: {
+        user: 'reebasiddiqui456@gmail.com',
+        pass: 'Haya456@'
+      }
+    });
+
+    const mailOptions = {
+      from: 'reebasiddiqui456@gmail.com', // Sender's email address
+      to: email_address, // Receiver's email address
+      subject: 'Password Reset OTP', // Email subject
+      text: `Your OTP is ${OTP}. Please enter it on the verification page to proceed.` // Email body
+    };
+
+    await transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'There was an error sending the email.' });
+      }
+      console.log('Email sent: ' + info.response);
+      res.status(200).json({ message: 'OTP sent successfully' });
+      otpMap[email_address] = { code: OTP, expiresAt: Date.now() + 300000 }; // Expires in 5 minutes (300,000 milliseconds)
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
