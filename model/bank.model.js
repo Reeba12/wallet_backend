@@ -1,61 +1,54 @@
-// models/User.js
-import { DataTypes } from 'sequelize';
-import {sequelize} from '../config/db.config.js';
+import mongoose from 'mongoose';
+import { v4 } from 'uuid';
 
-const Bank = sequelize.define('banks', {
-    id: {
-        type: DataTypes.INTEGER,
+const bankSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        default: v4,
         primaryKey: true,
-        autoIncrement: true,
-    },
+      },
     bank_name: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     country: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     bank_code: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     branch_code: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     contact_number: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     email_address: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     address: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     supported_currencies: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     status: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     compliance_status: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-    },
-    updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        type: String,
+        required: true,
     },
 });
+
+const Bank = mongoose.model('Bank', bankSchema);
 
 export default Bank;

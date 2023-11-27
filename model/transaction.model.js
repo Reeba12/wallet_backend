@@ -1,46 +1,39 @@
-// models/User.js
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.config.js';
+import mongoose from 'mongoose';
+import { v4 } from 'uuid';
 
-const Transaction = sequelize.define('transaction', {
-    id: {
-        type: DataTypes.INTEGER,
+const transactionSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        default: v4,
         primaryKey: true,
-        autoIncrement: true,
-    },
+      },
     sender_id: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     wallet_id: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     receiver_id: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     amount: {
-        type: DataTypes.INTEGER,
+        type: Number,
     },
-    currency: {
-        type: DataTypes.STRING,
-        allowNull: false,
+    type: {
+        type: String,
+        required: true,
     },
-    created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+    description: {
+        type: String,
     },
-    updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-    },
+    method: {
+        type: String,
+    },    
 });
 
-sequelize.sync().then(() => {
-    console.log('Transaction table created successfully!');
-}).catch((error) => {
-    console.error('Unable to create table : ', error);
-});
+const Transaction = mongoose.model('Transaction', transactionSchema);
 
 export default Transaction;

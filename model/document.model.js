@@ -1,41 +1,42 @@
-// models/User.js
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/db.config.js';
+import mongoose from 'mongoose';
+import { v4 } from 'uuid';
 
-const Document = sequelize.define('document', {
-    id: {
-        type: DataTypes.INTEGER,
+const documentSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        default: v4,
         primaryKey: true,
-        autoIncrement: true,
-    },
+      },
     user_id: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     document_type: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     document_url: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     is_verified: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+        type: Boolean,
+        default: false,
     },
     expiry_at: {
-        type: DataTypes.DATEONLY,
-        allowNull: false,
+        type: Date,
+        required: true,
     },
     created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        type: Date,
+        default: Date.now,
     },
     updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        type: Date,
+        default: Date.now,
     },
 });
+
+const Document = mongoose.model('Document', documentSchema);
 
 export default Document;

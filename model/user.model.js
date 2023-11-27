@@ -1,93 +1,64 @@
-// models/User.js
-import { DataTypes } from "sequelize";
-import { v4 as uuidv4 } from "uuid";
-import { sequelize } from "../config/db.config.js";
-import Batch from "./batch.model.js";
+import mongoose from 'mongoose';
+import { v4 } from 'uuid';
 
-const User = sequelize.define("User", {
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: () => uuidv4(),
+const userSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: v4,
     primaryKey: true,
   },
   name: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    type: String,
+    required: true,
   },
   email_address: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    type: String,
+    required: true,
   },
   password: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    type: String,
+    required: true,
   },
-//   login: {
-//     type: DataTypes.TEXT,
-//     allowNull: true,
-//     defaultValue: {
-//       login_count: 0,
-//       failed_attempts_count: 0,
-//       last_login_at: null,
-//       locked_out_till: null,
-//       last_failed_at: null,
-//     },
-//   },
-//   -------- reeba's code ----------------
-  // login: {
-  //     type: DataTypes.JSON,
-  //     allowNull: true,
-  //     defaultValue: {
-  //         login_count: 0,
-  //         failed_attempts_count: 0,
-  //         last_login_at: null,
-  //         locked_out_till: null,
-  //         last_failed_at: null,
-  //     },
-  // },
-//   ------------------------
-  // Change this line in your User model definition
- 
-  // login: {
-  //     type: DataTypes.TEXT,
-  //     allowNull: true,
-  //     defaultValue: null, // or your default object
-  // },
-
+  login: {
+    type: mongoose.Schema.Types.Mixed, // You can use Mixed for flexibility in storing various data types
+    default: {
+      login_count: 0,
+      failed_attempts_count: 0,
+      last_login_at: null,
+      locked_out_till: null,
+      last_failed_at: null,
+    },
+  },
   is_active: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    type: Boolean,
+    default: false,
   },
   is_verified: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    type: Boolean,
+    default: false,
   },
   cnic: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    type: String,
+    required: true,
   },
   mobile_number: {
-    type: DataTypes.STRING,
-    allowNull: true,
+    type: String,
   },
   paypocket_id: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    type: String,
+    required: true,
+    unique: true
   },
+  walletId: {
+    type: String,
+    ref: 'Wallet'
+  },
+  batchId: {
+    type: String,
+    ref: 'Batch'
+  }
 });
 
-// User.belongsToMany(Batch, {
-//     through: 'BatchUser', // Same join table 'BatchUser'
-//     as: 'Batches', // Alias for the association
-// });
-
-sequelize
-  .sync({ force: true })
-  .then(() => {
-    console.log("User table created successfully!");
-  })
-  .catch((error) => {
-    console.error("Unable to create table:", error);
-  });
+const User = mongoose.model('User', userSchema);
 
 export default User;

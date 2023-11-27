@@ -1,26 +1,30 @@
-import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/db.config.js'; // Assuming Sequelize connection is configured
-import User from './user.model.js';
+import mongoose from 'mongoose';
+import { v4 } from 'uuid';
 
-const Batch = sequelize.define('Batch', {
+const batchSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        default: v4,
+        primaryKey: true,
+      },
     name: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
     },
     totalAmount: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
+        type: Number,
+        required: true,
     },
     createdAt: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        type: Date,
+        default: Date.now,
     },
+    recipients: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    }],
 });
 
-// // Defining the association for recipients in a batch
-// Batch.belongsToMany(User, {
-//     through: 'User', // Automatically creates a join table 'BatchUser'
-//     as: 'Recipients', // Alias for the association
-// });
+const Batch = mongoose.model('Batch', batchSchema);
 
 export default Batch;

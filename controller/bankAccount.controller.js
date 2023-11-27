@@ -1,8 +1,6 @@
 import express from 'express';
-import BankAccount from '../model/bankAccountMongo.model.js';
+import BankAccount from '../model/bankAccount.model.js';
 import { v1 as UUIDV1 } from 'uuid';
-
-// const router = express.Router();
 
 // Create a new bank account
 export const createBankAccount = async (req, res) => {

@@ -1,5 +1,3 @@
-// routes/currency.js
-
 const express = require('express');
 const router = express.Router();
 const Currency = require('../models/currency');
@@ -20,7 +18,7 @@ router.post('/currencies', async (req, res) => {
 // Get a list of all currencies
 router.get('/currencies', async (req, res) => {
   try {
-    const currencies = await Currency.findAll();
+    const currencies = await Currency.find();
     res.status(200).json(currencies);
   } catch (error) {
     console.error(error);
@@ -33,7 +31,7 @@ router.get('/currency/:id', async (req, res) => {
   const id = req.params.id;
 
   try {
-    const currency = await Currency.findByPk(id);
+    const currency = await Currency.findById(id);
 
     if (!currency) {
       return res.status(404).json({ error: 'Currency not found' });

@@ -1,10 +1,11 @@
 import express from 'express';
 const router = express.Router(); // Import your service
-import { authenticate } from '../utils/middlewares/authMiddleware.js';
-import * as WalletController from '../controller/walletMongo.controller.js';
+import { authenticate, fetchUserData } from '../utils/middlewares/authMiddleware.js';
+import * as WalletController from '../controller/wallet.controller.js';
 
 // Create a personal wallet for an authenticated user
-router.post(`/create-wallet`, authenticate, WalletController.createWallet);
+router.post(`/create-wallet`, WalletController.createWallet);
+router.get(`/:id`, fetchUserData, WalletController.getWalletById);
 
 // Create a business wallet for an authenticated user
 // router.post('/business/batch', authenticate, WalletController.businessWallet);

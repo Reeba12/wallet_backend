@@ -1,53 +1,52 @@
-// models/Wallet.js
-import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/db.config.js';
+import mongoose from 'mongoose';
+import { v4 } from 'uuid';
 
-const Wallet = sequelize.define('userWallet', {
-    id: {
-        type: DataTypes.INTEGER,
+const walletSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        default: v4,
         primaryKey: true,
-        autoIncrement: true,
-    },
+      },
     user_id: {
-        type: DataTypes.INTEGER,
-        foreignKey: true,
+        type: String,
+        ref: 'User', // Reference to the User model
+        required: true,
     },
     balance: {
-        type: DataTypes.DECIMAL(10, 2),
-        defaultValue: 0.0,
+        type: Number,
+        default: 0.0,
     },
     currency: {
-        type: DataTypes.STRING,
-        defaultValue: 'PKR',
+        type: String,
+        default: 'PKR',
     },
     type: {
-        type: DataTypes.ENUM('personal', 'business'),
-        defaultValue: 'personal',
+        type: String,
+        enum: ['personal', 'business'],
+        default: 'personal',
     },
     address: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        type: String,
     },
     country: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        type: String,
     },
     city: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        type: String,
     },
     document: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        type: String,
     },
     created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        type: Date,
+        default: Date.now,
     },
     updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        type: Date,
+        default: Date.now,
     },
 });
+
+const Wallet = mongoose.model('Wallet', walletSchema);
 
 export default Wallet;

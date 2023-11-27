@@ -1,50 +1,33 @@
-// models/User.js
-import { DataTypes } from 'sequelize';
-import {sequelize} from '../config/db.config.js';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 } from 'uuid';
+import mongoose from 'mongoose';
 
-const BankAccount = sequelize.define('bank_account', {
-    id: {
-        type: DataTypes.UUID,
-        defaultValue: () => uuidv4(),
+const BankAccountSchema = new mongoose.Schema({
+    _id: {
+        type: String,
+        default: v4,
         primaryKey: true,
     },
     bank_name: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
     },
     account_number: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
     },
     account_holder_name: {
-        type: DataTypes.STRING,
+        type: String,
         allowNull: false,
     },
     amount: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: Number,
         defaultValue: 0.0,
     },
     user_id: {
-        type: DataTypes.INTEGER,
-        foreignKey: true,
-    },
-    created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-    },
-    updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        type: String,
+        ref: 'User', // Reference to the User model
+        required: true,
     },
 });
 
-
-sequelize.sync().then(() => {
-    console.log('bank_account table created successfully!');
-}).catch((error) => {
-    console.error('Unable to create table : ', error);
-});
-
+const BankAccount = mongoose.model('Bank', BankAccountSchema);
 
 export default BankAccount;
