@@ -5,10 +5,9 @@ const { authenticate } = require('../utils/middlewares/authMiddleware')
 import * as WalletController from '../controller/wallet.controller'
 
 // Create a personal wallet for an authenticated user
-router.post(`/personal`, authenticate, WalletController.personalWallet)
+router.post(`/create-wallet`, authenticate, WalletController.createWallet);
 
 // Create a business wallet for an authenticated user
-router.post('/business', authenticate, WalletController.businessWallet);
 // router.post('/business/batch', authenticate, WalletController.businessWallet);
 // router.get('/business/batch/list', authenticate, WalletController.businessWallet);
 // router.get('/business/batch/:batchId', authenticate, WalletController.businessWallet);

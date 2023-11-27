@@ -18,7 +18,7 @@ const Wallet = sequelize.define('userWallet', {
     },
     currency: {
         type: DataTypes.STRING,
-        defaultValue: 'USD',
+        defaultValue: 'PKR',
     },
     type: {
         type: DataTypes.ENUM('personal', 'business'),

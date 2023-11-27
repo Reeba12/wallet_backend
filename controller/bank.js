@@ -1,22 +1,14 @@
 // routes/bank.js
-
 const express = require('express');
 const router = express.Router();
-const Bank = require('../models/bank');
+const Bank = require('../model/bank.model');
 
 // Create a new bank
-router.post('/banks', async (req, res) => {
+export const createBank = async (req, res) => {
   const {
     bank_name,
     country,
     bank_code,
-    branch,
-    contact_number,
-    contact_email,
-    address,
-    supported_currencies,
-    status,
-    compliance_status,
   } = req.body;
 
   try {
@@ -24,20 +16,13 @@ router.post('/banks', async (req, res) => {
       bank_name,
       country,
       bank_code,
-      branch,
-      contact_number,
-      contact_email,
-      address,
-      supported_currencies,
-      status,
-      compliance_status,
     });
     res.status(201).json({ message: 'Bank created successfully', bank });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Bank creation failed' });
   }
-});
+};
 
 // Get a list of all banks
 router.get('/banks', async (req, res) => {
